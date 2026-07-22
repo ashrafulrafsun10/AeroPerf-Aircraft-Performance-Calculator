@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AeroPerf | Flight Performance Calculator</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="background"></div>
+
+<div class="container">
+
+    <header>
+
+        <h1>✈ AeroPerf</h1>
+
+        <p>Flight Performance Calculator</p>
+
+    </header>
+
+    <div class="glass-card">
+
+        <h2>Aircraft Information</h2>
+
+        <div class="form-grid">
+
+            <div class="input-group">
+                <label>Aircraft</label>
+                <select id="aircraft">
+                    <option>Boeing 737-800</option>
+                    <option>Airbus A320</option>
+                    <option>Boeing 777-300ER</option>
+                    <option>Boeing 787-9</option>
+                    <option>Cessna 172</option>
+                    <option>ATR 72</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Airport ICAO</label>
+                <input type="text" id="airport" placeholder="VGHS">
+            </div>
+
+            <div class="input-group">
+                <label>Runway Length (m)</label>
+                <input type="number" id="runwayLength" placeholder="3200">
+            </div>
+
+            <div class="input-group">
+                <label>Wind Direction (°)</label>
+                <input type="number" id="windDirection" placeholder="180">
+            </div>
+
+            <div class="input-group">
+                <label>Wind Speed (kt)</label>
+                <input type="number" id="windSpeed" placeholder="12">
+            </div>
+
+            <div class="input-group">
+                <label>Outside Air Temperature (°C)</label>
+                <input type="number" id="temperature" placeholder="32">
+            </div>
+
+            <div class="input-group">
+                <label>Pressure Altitude (ft)</label>
+                <input type="number" id="pressureAltitude" placeholder="500">
+            </div>
+
+            <div class="input-group">
+                <label>Aircraft Weight (kg)</label>
+                <input type="number" id="aircraftWeight" placeholder="65000">
+            </div>
+
+        </div>
+
+        <button id="calculate">
+
+            Calculate Performance
+
+        </button>
+
+        <div class="results">
+
+            <h2>Results</h2>
+
+            <div class="result-item">
+                <span>Density Altitude</span>
+                <strong id="densityAltitude">--</strong>
+            </div>
+
+            <div class="result-item">
+                <span>MTOW</span>
+                <strong id="mtow">--</strong>
+            </div>
+
+            <div class="result-item">
+                <span>Headwind Component</span>
+                <strong id="headwind">--</strong>
+            </div>
+
+            <div class="result-item">
+                <span>Crosswind Component</span>
+                <strong id="crosswind">--</strong>
+            </div>
+
+            <div class="result-item">
+                <span>Takeoff Distance</span>
+                <strong id="takeoffDistance">--</strong>
+            </div>
+
+            <div class="result-item">
+                <span>Landing Distance</span>
+                <strong id="landingDistance">--</strong>
+            </div>
+
+            <div class="result-item">
+                <span>Status</span>
+                <strong id="status">Waiting...</strong>
+            </div>
+
+        </div>
+
+        <div class="credit">
+
+            <div class="line"></div>
+
+            <h3>Designed & Developed by</h3>
+
+            <h2>ASHRAFUL FERDOUS RAFSUN</h2>
+
+            <p>© 2026 All Rights Reserved</p>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
