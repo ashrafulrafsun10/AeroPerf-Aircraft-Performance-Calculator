@@ -1,120 +1,110 @@
 const calculateBtn = document.getElementById("calculate");
 
-calculateBtn.addEventListener("click", () => {
+calculateBtn.addEventListener("click", function () {
 
-    const runway =
-        parseFloat(document.getElementById("runwayLength").value) || 0;
+    const aircraft = document.getElementById("aircraft").value;
 
-    const windSpeed =
-        parseFloat(document.getElementById("windSpeed").value) || 0;
+    const runway = Number(document.getElementById("runwayLength").value);
 
-    const temperature =
-        parseFloat(document.getElementById("temperature").value) || 15;
+    const windSpeed = Number(document.getElementById("windSpeed").value);
 
-    const pressureAltitude =
-        parseFloat(document.getElementById("pressureAltitude").value) || 0;
+    const temperature = Number(document.getElementById("temperature").value);
 
-    const aircraftWeight =
-        parseFloat(document.getElementById("aircraftWeight").value) || 0;
+    const pressureAltitude = Number(document.getElementById("pressureAltitude").value);
 
-    // Density Altitude
+    const aircraftWeight = Number(document.getElementById("aircraftWeight").value);
+
+    if (runway <= 0) {
+        alert("Please enter Runway Length");
+        return;
+    }
+
+    let mtow = 0;
+
+    switch (aircraft) {
+
+        case "Boeing 737-800":
+            mtow = 79015;
+            break;
+
+        case "Airbus A320":
+            mtow = 78000;
+            break;
+
+        case "Boeing 777-300ER":
+            mtow = 351500;
+            break;
+
+        case "Boeing 787-9":
+            mtow = 254000;
+            break;
+
+        case "Cessna 172":
+            mtow = 1111;
+            break;
+
+        case "ATR 72":
+            mtow = 23000;
+            break;
+
+        default:
+            mtow = 0;
+    }
+
     const densityAltitude =
         Math.round(
             pressureAltitude +
-            (120 * (temperature - 15))
+            ((temperature - 15) * 120)
         );
 
-    // Wind Components (Demo)
     const headwind =
         Math.round(windSpeed * 0.8);
 
     const crosswind =
         Math.round(windSpeed * 0.6);
 
-    // MTOW
-    let mtow = "";
-
-    const aircraft =
-        document.getElementById("aircraft").value;
-
-    switch(aircraft){
-
-        case "Boeing 737-800":
-            mtow = "79,015 kg";
-            break;
-
-        case "Airbus A320":
-            mtow = "78,000 kg";
-            break;
-
-        case "Boeing 777-300ER":
-            mtow = "351,500 kg";
-            break;
-
-        case "Boeing 787-9":
-            mtow = "254,000 kg";
-            break;
-
-        case "Cessna 172":
-            mtow = "1,111 kg";
-            break;
-
-        case "ATR 72":
-            mtow = "23,000 kg";
-            break;
-
-    }
-
-    // Simple Performance Formula
-
     const takeoffDistance =
         Math.round(
             1200 +
             densityAltitude * 0.08 +
             aircraftWeight * 0.01 -
-            headwind * 6
+            headwind * 5
         );
 
     const landingDistance =
-        Math.round(
-            takeoffDistance * 0.75
-        );
+        Math.round(takeoffDistance * 0.75);
 
-    // Output
-
-    document.getElementById("densityAltitude").innerHTML =
+    document.getElementById("densityAltitude").textContent =
         densityAltitude + " ft";
 
-    document.getElementById("mtow").innerHTML =
-        mtow;
+    document.getElementById("mtow").textContent =
+        mtow.toLocaleString() + " kg";
 
-    document.getElementById("headwind").innerHTML =
+    document.getElementById("headwind").textContent =
         headwind + " kt";
 
-    document.getElementById("crosswind").innerHTML =
+    document.getElementById("crosswind").textContent =
         crosswind + " kt";
 
-    document.getElementById("takeoffDistance").innerHTML =
+    document.getElementById("takeoffDistance").textContent =
         takeoffDistance + " m";
 
-    document.getElementById("landingDistance").innerHTML =
+    document.getElementById("landingDistance").textContent =
         landingDistance + " m";
 
-    if(runway >= takeoffDistance){
+    const status = document.getElementById("status");
 
-        document.getElementById("status").innerHTML =
-            "✅ SAFE";
+    if (aircraftWeight <= mtow && runway >= takeoffDistance) {
 
-        document.getElementById("status").style.color =
-            "#4CFF7A";
+        status.textContent = "✅ SAFE";
 
-    }else{
+        status.style.color = "#42ff8c";
 
-        document.getElementById("status").innerHTML =
-            "❌ NOT SAFE";
+    } else {
 
-        document.getElementById("status").style.color =
-            "#FF5A5A";
+        status.textContent = "❌ NOT SAFE";
+
+        status.style.color = "#ff5555";
 
     }
 
