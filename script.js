@@ -1,175 +1,121 @@
-const aircraftDatabase = {
+const calculateBtn = document.getElementById("calculate");
 
-    "Boeing 737-800": {
+calculateBtn.addEventListener("click", () => {
 
-        mtow: 79015,
+    const runway =
+        parseFloat(document.getElementById("runwayLength").value) || 0;
 
-        takeoffFactor: 0.72,
+    const windSpeed =
+        parseFloat(document.getElementById("windSpeed").value) || 0;
 
-        landingFactor: 0.58
+    const temperature =
+        parseFloat(document.getElementById("temperature").value) || 15;
 
-    },
+    const pressureAltitude =
+        parseFloat(document.getElementById("pressureAltitude").value) || 0;
 
-    "Airbus A320": {
+    const aircraftWeight =
+        parseFloat(document.getElementById("aircraftWeight").value) || 0;
 
-        mtow: 78000,
+    // Density Altitude
+    const densityAltitude =
+        Math.round(
+            pressureAltitude +
+            (120 * (temperature - 15))
+        );
 
-        takeoffFactor: 0.70,
+    // Wind Components (Demo)
+    const headwind =
+        Math.round(windSpeed * 0.8);
 
-        landingFactor: 0.56
+    const crosswind =
+        Math.round(windSpeed * 0.6);
 
-    },
+    // MTOW
+    let mtow = "";
 
-    "Boeing 777-300ER": {
+    const aircraft =
+        document.getElementById("aircraft").value;
 
-        mtow: 351500,
+    switch(aircraft){
 
-        takeoffFactor: 0.85,
+        case "Boeing 737-800":
+            mtow = "79,015 kg";
+            break;
 
-        landingFactor: 0.70
+        case "Airbus A320":
+            mtow = "78,000 kg";
+            break;
 
-    },
+        case "Boeing 777-300ER":
+            mtow = "351,500 kg";
+            break;
 
-    "Boeing 787-9": {
+        case "Boeing 787-9":
+            mtow = "254,000 kg";
+            break;
 
-        mtow: 254000,
+        case "Cessna 172":
+            mtow = "1,111 kg";
+            break;
 
-        takeoffFactor: 0.80,
-
-        landingFactor: 0.65
-
-    },
-
-    "Cessna 172": {
-
-        mtow: 1111,
-
-        takeoffFactor: 0.35,
-
-        landingFactor: 0.28
-
-    },
-
-    "ATR 72": {
-
-        mtow: 23000,
-
-        takeoffFactor: 0.55,
-
-        landingFactor: 0.45
+        case "ATR 72":
+            mtow = "23,000 kg";
+            break;
 
     }
 
-};
-const calculateBtn = document.getElementById("calculate");
-function calculateDensityAltitude(pressureAltitude, temperature) {
+    // Simple Performance Formula
 
-    return Math.round(
-        pressureAltitude + (120 * (temperature - 15))
-    );
+    const takeoffDistance =
+        Math.round(
+            1200 +
+            densityAltitude * 0.08 +
+            aircraftWeight * 0.01 -
+            headwind * 6
+        );
 
-}
+    const landingDistance =
+        Math.round(
+            takeoffDistance * 0.75
+        );
 
-function calculateWindComponents(windSpeed, windDirection, runwayHeading) {
+    // Output
 
-    const angle = (windDirection - runwayHeading) * Math.PI / 180;
-
-    return {
-
-        headwind: Math.round(windSpeed * Math.cos(angle)),
-
-        crosswind: Math.round(Math.abs(windSpeed * Math.sin(angle)))
-
-    };
-
-}
-calculateBtn.addEventListener("click", function () {
-
-    // Read Inputs
-    const airport = document.getElementById("airport").value.toUpperCase();
-
-    const runway = Number(document.getElementById("runwayLength").value);
-
-    const windDirection = Number(document.getElementById("windDirection").value);
-
-    const windSpeed = Number(document.getElementById("windSpeed").value);
-
-    const temperature = Number(document.getElementById("temperature").value);
-
-    const pressureAltitude = Number(document.getElementById("pressureAltitude").value);
-
-    const aircraftWeight = Number(document.getElementById("aircraftWeight").value);
-
-    const densityAltitude =
-    calculateDensityAltitude(
-        pressureAltitude,
-        temperature
-    );
-
-const wind =
-    calculateWindComponents(
-        windSpeed,
-        windDirection,
-        180
-    );
-
-const headwind = wind.headwind;
-
-const crosswind = wind.crosswind;
-    const takeoffDistance = Math.round(
-    runway * aircraftInfo.takeoffFactor
-);
-
-const landingDistance = Math.round(
-    runway * aircraftInfo.landingFactor
-);
-const aircraft = document.getElementById("aircraft").value;
-
-const aircraftInfo = aircraftDatabase[aircraft];
-    // Show Results
-    document.getElementById("densityAltitude").textContent =
+    document.getElementById("densityAltitude").innerHTML =
         densityAltitude + " ft";
 
-    document.getElementById("headwind").textContent =
+    document.getElementById("mtow").innerHTML =
+        mtow;
+
+    document.getElementById("headwind").innerHTML =
         headwind + " kt";
 
-    document.getElementById("crosswind").textContent =
+    document.getElementById("crosswind").innerHTML =
         crosswind + " kt";
 
-    document.getElementById("takeoffDistance").textContent =
+    document.getElementById("takeoffDistance").innerHTML =
         takeoffDistance + " m";
 
-    document.getElementById("landingDistance").textContent =
+    document.getElementById("landingDistance").innerHTML =
         landingDistance + " m";
-        document.getElementById("mtow").textContent =
-    aircraftInfo.mtow.toLocaleString() + " kg";
 
-    if (aircraftWeight > aircraftInfo.mtow) {
+    if(runway >= takeoffDistance){
 
-    document.getElementById("status").textContent =
-    "❌ OVERWEIGHT";
+        document.getElementById("status").innerHTML =
+            "✅ SAFE";
 
-    document.getElementById("status").style.color =
-    "#ff4d4d";
+        document.getElementById("status").style.color =
+            "#4CFF7A";
 
-}
-else if (runway >= takeoffDistance) {
+    }else{
 
-    document.getElementById("status").textContent =
-    "✅ SAFE";
+        document.getElementById("status").innerHTML =
+            "❌ NOT SAFE";
 
-    document.getElementById("status").style.color =
-    "#5cff8d";
+        document.getElementById("status").style.color =
+            "#FF5A5A";
 
-}
-else {
-
-    document.getElementById("status").textContent =
-    "⚠ RUNWAY TOO SHORT";
-
-    document.getElementById("status").style.color =
-    "#ffd54a";
-
-}
+    }
 
 });
